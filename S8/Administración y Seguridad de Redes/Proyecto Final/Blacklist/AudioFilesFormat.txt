@@ -1,4 +1,0 @@
-# Audio.Files.Format
-\.3gp(\?.*)?$
-\.aa(\?.*)?$
-\.aac(\?.*)?$
