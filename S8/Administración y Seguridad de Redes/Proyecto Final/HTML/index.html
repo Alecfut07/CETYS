@@ -92,29 +92,46 @@ and is wrapped around the whole page content, except for the footer in this exam
                 <div class="w3-container">
                     <p>Para establecer nuestro firewall perimetral primero tenemos que instalar el debido software en
                         cada lado de la red. El lado izquierdo le pertenece a pfSense y el derecho le pertenece a
-                        OPNSense. La instalación de ambos es casi igual. Primero nos metemos al Virtualbox. En el
-                        virtualbox, le damos Ctrl-N y lo nombramos pfSense o OPNSense como corresponda. Seleccionamos el
-                        tipo BSD y la versión FreeBSD(64-bit) con una memoria de 1024MB y un disco virtual VDI dinámico
-                        de 16 GB. Antes de encender la máquina virtual vamos a moverle a algunos de los ajustes. Primero
-                        en la ventana de sistema, vamos a escoger dos procesadores y configurar el boot order para que
-                        quede: Hard Disk, Optical, y Floppy. En el siguiente paso vamos a escoger el disco vacío y
-                        seleccionar el archivo que corresponda,el pfSense y OPNSense tienen a sus archivos
-                        correspondientes en la carpeta C:// R-2022. En la ventana de network, vamos a tener dos bridged
-                        adapters. Para el pfSense vamos a escoger el VLAN 40 y el VLAN 101 y para el OPNSense el VLAN
-                        201 y el VLAN 30, en ese orden.Usamos T Server para el pfSense y MT Desktop para el OPNSense. De
-                        aquí ya podemos iniciar la máquina virtual.</p>
+                        OPNSense. La instalación de ambos es casi igual.</p>
+                    <ul>
+                        <li>Primero nos metemos al Virtualbox. En el virtualbox, le damos Ctrl-N y lo nombramos pfSense
+                            o OPNSense como corresponda.</li>
+                        <li>Seleccionamos el tipo BSD y la versión FreeBSD(64-bit) con una memoria de 1024MB y un disco
+                            virtual VDI dinámico de 16 GB.</li>
+                    </ul>
+                    <p>Antes de encender la máquina virtual vamos a moverle a algunos de los ajustes:</p>
+                    <ul>
+                        <li>Primero en la ventana de sistema, vamos a escoger dos procesadores y configurar el boot
+                            order para que quede: Hard Disk, Optical, y Floppy.</li>
+                        <li>En el siguiente paso vamos a escoger el disco vacío y seleccionar el archivo que
+                            corresponda,el pfSense y OPNSense tienen a sus archivos correspondientes en la carpeta C://
+                            R-2022.</li>
+                    </ul>
+                    <p>Para el pfSense vamos a escoger el VLAN 40 y el VLAN 101 y para el OPNSense el VLAN 201 y el VLAN
+                        30, en ese orden.Usamos T Server para el pfSense y MT Desktop para el OPNSense. De aquí ya
+                        podemos iniciar la máquina virtual.</p>
                     <p>En el pfSense vamos a ver el instalador vamos a escoger las opciones por default y darle
-                        &lt;Accept&gt;. Después seleccionar: Keymap Selection :&lt;Continue with default keymap&gt;,
-                        Partitioning : Auto(UFS) , y Manual Configuration &lt;NO&gt;. En el OPNSense nos va a mostrar un
-                        login, para realizar la instalación vamos a darle: login-installer y password:opnsense. Al
-                        acabar la instalación vamos a acceder con la cuenta root y la contraseña opnsense. Con esto
-                        concluimos la instalación de las dos máquinas virtuales.</p>
+                        &lt;Accept&gt;.</p>
+                    <ul>
+                        <li>Después seleccionar: Keymap Selection :&lt;Continue with default keymap&gt;</li>
+                        <li>Partitioning : Auto(UFS)</li>
+                        <li>Manual Configuration &lt;NO&gt;</li>
+                    </ul>
+                    <p>En el OPNSense nos va a mostrar un login, para realizar la instalación vamos a darle: login:
+                        installer y password: opnsense. Al acabar la instalación vamos a acceder con la cuenta root y la
+                        contraseña opnsense. Con esto concluimos la instalación de las dos máquinas virtuales.</p>
+
                     <p>Una vez que acabe la instalación, vamos a seleccionar la opción 2 para escoger la ip de nuestro
-                        wan y lan. En el caso del pfSense tenemos la ip 10.21.1.15/24 para el lan y 158.122.90.15/22
-                        para el wan. El OPNSense usa 10.22.1.17/24 para el lan y 158.122.67.17/22 para el wan. De aquí
-                        seleccionamos la opción 8 para el shell. Le damos un ping a google.com para verificar que
-                        tenemos conexión. Una vez que verifiquemos la conexión es hora de crear las reglas del firewall.
-                    </p>
+                        wan y lan.</p>
+                    <ul>
+                        <li>En el caso del pfSense tenemos la ip 10.21.1.15/24 para el lan y 158.122.90.15/22 para el
+                            wan.</li>
+                        <li>El OPNSense usa 10.22.1.17/24 para el lan y 158.122.67.17/22 para el wan.</li>
+                        <li>De aquí seleccionamos la opción 8 para el shell. Le damos un ping a google.com para
+                            verificar que tenemos conexión.</li>
+                    </ul>
+                    <p>Una vez que verifiquemos la conexión es hora de crear las reglas del firewall.</p>
+
                     <p>Para crear las reglas primero tenemos que acceder al dashboard del pfSense y del OPNSense. Para
                         esto vamos a tener que crear dos máquinas de Linux Mint, una en cada lado. Una vez que sean
                         creadas y con conexión a internet, vamos a ingresar la ip de la lan correspondiente en el
@@ -124,12 +141,6 @@ and is wrapped around the whole page content, except for the footer in this exam
                         protocolo ICMP de tipo Echo Request para ambos lan y wan. Finalmente vamos a crear reglas de
                         protocolo TCP en los puertos 80(HTTP) y 443(HTTPS) y reglas de protocolo UDP en los puertos
                         53(DNS) y 123(NTP).</p>
-                    <p>Para nuestro servidores usamos dos ambientes operativos de Debian, uno en cada lado. Empezamos
-                        metiéndonos al virtualbox y le damos Ctrl-I e importamos el archivo DLR.ova del repositorio
-                        C:\R-2022. En la ventana display, seleccionamos el controlador VBoxVGA. No audio. En la ventana
-                        network escogemos Bridged adapter con el VLAN 201 para el lado derecho y 101 para el izquierdo
-                        con el tipo T server. El debian del lado izquierdo va a tener la ip ** y el derecho ** y cada
-                        uno va a tener cuatro usuarios: root, asr1, asr2, y asr3.</p>
                 </div>
             </div>
             <hr>
@@ -180,6 +191,22 @@ and is wrapped around the whole page content, except for the footer in this exam
                             la terminal, el registro del intruso con sus respectivos datos (fecha, hora, sistema
                             operativo, navegador, etc).</li>
                     </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="w3-card-4 w3-margin w3-white">
+                <img src="" alt="Honeypot derecha" style="width:100%">
+                <div class="w3-container">
+                    <h3><b>Servidores y PCs</b></h3>
+                </div>
+
+                <div class="w3-container">
+                    <p>Para nuestro servidores usamos dos ambientes operativos de Debian, uno en cada lado. Empezamos
+                        metiéndonos al virtualbox y le damos Ctrl-I e importamos el archivo DLR.ova del repositorio
+                        C:\R-2022. En la ventana display, seleccionamos el controlador VBoxVGA. No audio. En la ventana
+                        network escogemos Bridged adapter con el VLAN 201 para el lado derecho y 101 para el izquierdo
+                        con el tipo T server. El debian del lado izquierdo va a tener la ip ** y el derecho ** y cada
+                        uno va a tener cuatro usuarios: root, asr1, asr2, y asr3.</p>
                 </div>
             </div>
             <hr>
