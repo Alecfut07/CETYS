@@ -414,7 +414,36 @@ and is wrapped around the whole page content, except for the footer in this exam
                 </div>
 
                 <div class="w3-container">
-                    <p>Endlessh</p>
+                    <a href="https://github.com/skeeto/endlessh">Repositorio Endlessh</a>
+                    <p>
+                        Con la ayuda del tarpit Endlessh creamos un honeypot en un servidor de Debian. Esta herramienta
+                        funciona en
+                        la mayoria de ambientes linux y la idea principal es cambiar el puerto del servicio ssh (puerto
+                        22) a otro
+                        puerto disponible y hacer que nuestro Endlessh ahora escuche el puerto 22. Endlessh se encargara
+                        de imitar
+                        la respuesta del servicio de ssh pero en realidad solo esta desperdiciando el tiempo del
+                        atacante, si se trata
+                        de un script automatizado Endlessh hacce que el script se quede atorado.
+                    </p>
+
+                    <p> Pre-Configuracion</p>
+                    <ul>
+                        <li>vi /etc/ssh/sshd_config</li>
+                        <li>Descomentar la linea "PORT 22" y cambiar por "PORT 69" ahora SSH escuha el puerto 69.</li>
+                    </ul>
+
+                    <p> Configuracion de Endlessh</p>
+                    <ul>
+                        <li>git clone https://github.com/skeeto/endlessh</li>
+                        <li>cd endlessh</li>
+                        <li>make</li>
+                        <li>cp util/endlessh.service /etc/systemd/system</li>
+                        <li>mkdir -p /etc/endlessh</li>
+                        <li>vi /etc/endlessh/config</li>
+                        <li>En el archivo aggregar la linea "PORT 22"</li>
+                        <li>systemctl start endlessh</li>
+                    </ul>
                 </div>
             </div>
             <hr>
@@ -443,7 +472,47 @@ and is wrapped around the whole page content, except for the footer in this exam
                 </div>
 
                 <div class="w3-container">
-                    <p>hola</p>
+                    <p>Para los firewalls y proxys se establecieron de la siguiente forma:</p>
+                    <ul>
+                        <li>NAT - Port Forward: creamos una de http, https, ssh para redirigir un puerto de red de un
+                            nodo de red a otro con el respectivo protocolo.</li>
+                        <li>NAT - Port Forward (proxy): También establecimos una para http con puerto 3128 y otra de
+                            https con puerto 3129.</li>
+                        <li>Firewall Rules Floating: Creamos una regla flotante de ICMP para que actue en múltiples
+                            interfaces en las direcciones de entrada, salida o ambas. Esto para crear el diseño de dicha
+                            regla con la finalidad de que sea más complejo y propenso a errores del usuario.</li>
+                        <li>Firewall Rules LAN: Creamos reglas para la interfaz de LAN, por ejemplo en una usamos el
+                            aliases de LAN_TCP (puertos 80 y 443), otra pero usando el aliases de LAN_UDP (puertos 53 y
+                            123) y creamos dos reglas para los proxys para hacer el block de proxy en protocolos de http
+                            y https. Con esto nos permite establecer cualquier acceso desde la red LAN a la red.</li>
+                        <li>Firewall Rules WAN: Creamos reglas para la interfaz de WAN, por ejemplo en una establecimos
+                            el puerto 80 (http), luego otra regla para el puerto 443 (https) y una tercera regla para el
+                            puerto 22 (ssh). Tiene la finalidad de que la red LAN origina paquetes del examinador de
+                            equipos y eso hace que el opnsense los bloquea automáticamente como medida de seguridad.
+                        </li>
+                    </ul>
+
+                    <p>La configuración del Proxy en opnsense fue de la siguiente manera:</p>
+                    <ul>
+                        <li>Se descargaron las librerias "Squid" y "SquidGuard", estas se encargan de manejar el
+                            servidor proxy y
+                            el bloqueo de trafico https dependiendo de las restricciones de acceso a paginas dentro de
+                            la web.</li>
+                        <li>En General Proxy: Habilitamos el proxy.</li>
+                        <li>En Local Cache: Habilitamos el local cache.</li>
+                        <li>En el servicio de SQUID: Habilitamos el Transparent HTTP proxy y el SSL inspection. También
+                            establecemos la interfaz LAN del proxy, luego le colocamos el puerto de 3128 en proxy, el
+                            puerto de 3129 en SSL Proxy y seleccionamos nuestro certificado que creamos.</li>
+                        <li>En SquidGuard: Agregamos <a
+                                href="https://dsi.ut-capitole.fr/documentations/cache/squidguard_en.html#contrib"> el
+                                blacklist </a>que contiene las categorias que nos ayudan a bloquear paginas no deseadas
+                            en la red,
+                            tambien es necsario en descargar sus certificados y aplicarlos
+                            cuando se agregan nuevos links. Aqui tambien agregamos las expresiones regulares para
+                            (audio, videos, CD/DVD, ejecutables y archivos
+                            comprimidos) para la descarga de archivos con las extensiones propuestas en el documento.
+                        </li>
+                    </ul>
                 </div>
             </div>
             <hr>
