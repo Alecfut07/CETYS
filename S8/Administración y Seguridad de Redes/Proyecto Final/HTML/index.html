@@ -75,36 +75,102 @@ and is wrapped around the whole page content, except for the footer in this exam
                 <img src="https://raw.githubusercontent.com/Alecfut07/CETYS/main/S8/Administraci%C3%B3n%20y%20Seguridad%20de%20Redes/Proyecto%20Final/Images/pfsense-wan-lan-setup.png"
                     alt="pfSense Setup" style="width:100%">
                 <div class="w3-container">
-                    <h3><b>pfSense</b></h3>
-                    <h5>Instalación del pfSense y estableciendo el WAN y LAN</h5>
+                    <h3><b>Instalación de pfSense y OPNsense</b></h3>
                 </div>
-
                 <div class="w3-container">
-                    <p>Creamos una máquina virtual de pfSense en virtualbox en la red izquierda de la subred, la cual le
-                        hemos establecido sus configuraciones como:</p>
-                    <ul>
-                        <li>Núcleos del procesador: 2</li>
-                        <li>Almacenamiento: 16 GB</li>
-                        <li>RAM: 1,024 MB</li>
-                    </ul>
-                    <p>Para el caso de la configuración de la red, establecimos dos adaptadores de red (en base de la
-                        subred del diagrama):</p>
-                    <ul>
-                        <p>Adaptador 1:</p>
-                        <li>hola</li>
-                    </ul>
-                    <!--<div class="w3-row">
-        <div class="w3-col m8 s12">
-          <p><button class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></button></p>
-        </div>
-        <div class="w3-col m4 w3-hide-small">
-          <p><span class="w3-padding-large w3-right"><b>Comments  https://raw.githubusercontent.com/Alecfut07/CETYS/main/S8/Administraci%C3%B3n%20y%20Seguridad%20de%20Redes/Proyecto%20Final/Images/pfsense-wan-lan-setup.png</b> <span class="w3-tag">0</span></span></p>
-        </div>
-      </div>-->
+                    <p>Para establecer nuestro firewall perimetral primero tenemos que instalar el debido software en
+                        cada lado de la red. El lado izquierdo le pertenece a pfSense y el derecho le pertenece a
+                        OPNSense. La instalación de ambos es casi igual. Primero nos metemos al Virtualbox. En el
+                        virtualbox, le damos Ctrl-N y lo nombramos pfSense o OPNSense como corresponda. Seleccionamos el
+                        tipo BSD y la versión FreeBSD(64-bit) con una memoria de 1024MB y un disco virtual VDI dinámico
+                        de 16 GB. Antes de encender la máquina virtual vamos a moverle a algunos de los ajustes. Primero
+                        en la ventana de sistema, vamos a escoger dos procesadores y configurar el boot order para que
+                        quede: Hard Disk, Optical, y Floppy. En el siguiente paso vamos a escoger el disco vacío y
+                        seleccionar el archivo que corresponda,el pfSense y OPNSense tienen a sus archivos
+                        correspondientes en la carpeta C:// R-2022. En la ventana de network, vamos a tener dos bridged
+                        adapters. Para el pfSense vamos a escoger el VLAN 40 y el VLAN 101 y para el OPNSense el VLAN
+                        201 y el VLAN 30, en ese orden.Usamos T Server para el pfSense y MT Desktop para el OPNSense. De
+                        aquí ya podemos iniciar la máquina virtual.</p>
+                    <p>En el pfSense vamos a ver el instalador vamos a escoger las opciones por default y darle
+                        &lt;Accept&gt;. Después seleccionar: Keymap Selection :&lt;Continue with default keymap&gt;,
+                        Partitioning : Auto(UFS) , y Manual Configuration &lt;NO&gt;. En el OPNSense nos va a mostrar un
+                        login, para realizar la instalación vamos a darle: login-installer y password:opnsense. Al
+                        acabar la instalación vamos a acceder con la cuenta root y la contraseña opnsense. Con esto
+                        concluimos la instalación de las dos máquinas virtuales.</p>
+                    <p>Una vez que acabe la instalación, vamos a seleccionar la opción 2 para escoger la ip de nuestro
+                        wan y lan. En el caso del pfSense tenemos la ip 10.21.1.15/24 para el lan y 158.122.90.15/22
+                        para el wan. El OPNSense usa 10.22.1.17/24 para el lan y 158.122.67.17/22 para el wan. De aquí
+                        seleccionamos la opción 8 para el shell. Le damos un ping a google.com para verificar que
+                        tenemos conexión. Una vez que verifiquemos la conexión es hora de crear las reglas del firewall.
+                    </p>
+                    <p>Para crear las reglas primero tenemos que acceder al dashboard del pfSense y del OPNSense. Para
+                        esto vamos a tener que crear dos máquinas de Linux Mint, una en cada lado. Una vez que sean
+                        creadas y con conexión a internet, vamos a ingresar la ip de la lan correspondiente en el
+                        browser, por ejemplo en Linux Mint del lado derecho vamos a ingresar 10.22.1.17. Esto nos
+                        llevará al dashboard. Para ingresar usaremos user-admin, password-pfsense para el lado izquierdo
+                        y user-root, password-opnsense para el lado derecho. Primero vamos a crear una regla de
+                        protocolo ICMP de tipo Echo Request para ambos lan y wan. Finalmente vamos a crear reglas de
+                        protocolo TCP en los puertos 80(HTTP) y 443(HTTPS) y reglas de protocolo UDP en los puertos
+                        53(DNS) y 123(NTP).</p>
+                    <p>Para nuestro servidores usamos dos ambientes operativos de Debian, uno en cada lado. Empezamos
+                        metiéndonos al virtualbox y le damos Ctrl-I e importamos el archivo DLR.ova del repositorio
+                        C:\R-2022. En la ventana display, seleccionamos el controlador VBoxVGA. No audio. En la ventana
+                        network escogemos Bridged adapter con el VLAN 201 para el lado derecho y 101 para el izquierdo
+                        con el tipo T server. El debian del lado izquierdo va a tener la ip ** y el derecho ** y cada
+                        uno va a tener cuatro usuarios: root, asr1, asr2, y asr3.</p>
                 </div>
             </div>
             <hr>
+            <div class="w3-card-4 w3-margin w3-white">
+                <img src="" alt="Honeypot derecha" style="width:100%">
+                <div class="w3-container">
+                    <h3><b>Honeypot (Pentbox)</b></h3>
+                    <h5>Instalación de Pentbox en Linux Mint.</h5>
+                </div>
 
+                <div class="w3-container">
+                    <p>Pentbox es un conjunto de programas, que se pueden ser ejecutados individualmente. Y está
+                        programado en un lenguaje interpretado en ruby. En este caso usamos el apartado de Honeypot para
+                        establecerla como señuelo dentro de la red de la derecha, y con el objetivo de poder evitar un
+                        posible ataque al sistema informático.</p>
+                    <p>Los pasos para instalar Pentbox desde la terminal:</p>
+                    <ul>
+                        <li>Paso #1 (Usuario root): sudo su</li>
+                        <li>Paso #2 (Instalar el lenguaje de ruby): apt install ruby</li>
+                        <li>Paso #3 (Agarrar la ip a "atacar"): ifconfig</li>
+                        <li>Paso #4 (Moverse a la carpeta de descargas): cd Downloads</li>
+                        <li>Paso #5 (Descargar el archivo Pentbox): wget
+                            http://downloads.sourceforge.net/project/pentbox18realised/pentbox-1.8.tar.gz</li>
+                        <li>Paso #6 (Descomprimir el archivo Pentbox): tar -xvf pentbox-1.8.tar.gz</li>
+                        <li>Paso #7 (Acceder al folder de Pentbox): cd pentbox-1.8</li>
+                    </ul>
+                    <p>Los pasos para configurar el Honeypot en Pentbox desde la terminal:</p>
+                    <ul>
+                        <li>NOTA: Tienes que tener los privilegios de root para poder usar el programa de Pentbox, y
+                            para eso primero tienes que usar el comando de "sudo su".</li>
+                        <li>Paso #8 (Ejecutar el programa de Pentbox): ruby pentbox.rb</li>
+                        <li>Paso #9 (Entrar al apartado "Network tools"): 2</li>
+                        <li>Paso #10 (Entrar al apartado "Honeypot"): 3</li>
+                        <li>Paso #11 (Hacer configuración manual): 2</li>
+                        <li>Paso #12 (Colocar el puerto): 80</li>
+                        <li>Paso #13 (Insertar cualquier mensaje falso): "Has sido atrapado en el Honeypot..."</li>
+                        <li>Paso #14 (Guardar los registros de los intrusos): y</li>
+                        <li>Paso #15 (Seleccionar la localización del archivo de registros): Presionar Enter para que lo
+                            guarde en la ruta por predeterminado (*/pentbox/other/log_honeypot.txt)</li>
+                        <li>Paso #16 (Activar el sonido de intruso): y</li>
+                        <li>Se mostrará en la terminal corriendo el honeypot ya configurado.</li>
+                    </ul>
+                    <p>Los pasos para hacer la prueba del Honeypot:</p>
+                    <ul>
+                        <li>Paso #17: Entrar al navegador web.</li>
+                        <li>Paso #18: Colocar en el buscador la ip que va a ser atacada.</li>
+                        <li>Finalmente se mostrará en pantalla el mensaje falso en el navegador y también se mostrará en
+                            la terminal, el registro del intruso con sus respectivos datos (fecha, hora, sistema
+                            operativo, navegador, etc).</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
             <!-- Blog entry -->
             <div class="w3-card-4 w3-margin w3-white">
                 <img src="/w3images/bridge.jpg" alt="Norway" style="width:100%">
