@@ -72,8 +72,20 @@ and is wrapped around the whole page content, except for the footer in this exam
         <div class="w3-col l8 s12">
             <!-- Blog entry -->
             <div class="w3-card-4 w3-margin w3-white">
-                <img src="https://raw.githubusercontent.com/Alecfut07/CETYS/main/S8/Administraci%C3%B3n%20y%20Seguridad%20de%20Redes/Proyecto%20Final/Images/pfsense-wan-lan-setup.png"
-                    alt="pfSense Setup" style="width:100%">
+                <!--<img src="https://raw.githubusercontent.com/Alecfut07/CETYS/main/S8/Administraci%C3%B3n%20y%20Seguridad%20de%20Redes/Proyecto%20Final/Images/pfsense-wan-lan-setup.png"
+                    alt="pfSense Setup" style="width:100%">-->
+                <div class="w3-content" style="max-width:800px;position:relative">
+
+                    <img class="mySlides w3-animate-opacity" src="/w3images/snow.jpg" style="width:100%">
+                    <img class="mySlides w3-animate-opacity" src="/w3images/lights.jpg" style="width:100%">
+                    <img class="mySlides w3-animate-opacity" src="/w3images/mountains.jpg" style="width:100%">
+                    <img class="mySlides w3-animate-opacity" src="/w3images/forest.jpg" style="width:100%">
+
+                    <a class="w3-button w3-hover-dark-grey" style="position:absolute;top:45%;left:0;"
+                        onclick="plusDivs(-1)">❮</a>
+                    <a class="w3-button w3-hover-dark-grey" style="position:absolute;top:45%;right:0;"
+                        onclick="plusDivs(+1)">❯</a>
+                </div>
                 <div class="w3-container">
                     <h3><b>Instalación de pfSense y OPNsense</b></h3>
                 </div>
@@ -283,6 +295,28 @@ and is wrapped around the whole page content, except for the footer in this exam
         <button class="w3-button w3-black w3-padding-large w3-margin-bottom">Next »</button>
         <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
     </footer>
+
+    <script>
+        // Slideshows
+        var slideIndex = 1;
+
+        function plusDivs(n) {
+            slideIndex = slideIndex + n;
+            showDivs(slideIndex);
+        }
+
+        function showDivs(n) {
+            var x = document.getElementsByClassName("mySlides");
+            if (n > x.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = x.length };
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            x[slideIndex - 1].style.display = "block";
+        }
+
+        showDivs(1);
+    </script>
 
 </body>
 
